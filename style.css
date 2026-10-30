@@ -10,3 +10,7 @@ body {
     align-items: center;
     font-family: Oxygen, sans-serif;
 }
+
+#RatingDistribution {
+height: 500px;
+}
