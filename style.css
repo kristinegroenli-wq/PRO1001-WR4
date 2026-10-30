@@ -1,0 +1,12 @@
+body {
+    /* uigradients.com, copied from the example in module 6 and adjusted */
+    background: #bdc3c7;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #1c92d2, #f2fcfe);  
+    background: linear-gradient(to top, #1c92d2, #f2fcfe); /*   */
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Oxygen, sans-serif;
+}
