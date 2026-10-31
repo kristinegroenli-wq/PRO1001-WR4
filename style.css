@@ -12,5 +12,11 @@ body {
 }
 
 #RatingDistribution {
-height: 500px;
+height: 300px;
+width: 800px;
+}
+
+#TopRatedProducts {
+height: 300px;
+width: 800px;
 }
