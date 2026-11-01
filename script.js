@@ -1,7 +1,11 @@
 
 
 fetch('https://fakestoreapi.com/products')
-  .then(Response => Response.json())
+  .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } 
+      return response.json()})
   .then(products => {
     console.log(products);
    
