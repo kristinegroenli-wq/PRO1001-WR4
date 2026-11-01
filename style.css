@@ -7,16 +7,55 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /*align-items: center;*/
     font-family: Oxygen, sans-serif;
 }
 
+main {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+nav {
+    background-color: #1c92d2;
+    padding: 10px;
+}
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+nav li {
+    display: inline;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+nav a:hover {
+    background-color: darkgrey;
+}
+
+
 #RatingDistribution {
 height: 300px;
-width: 800px;
+width: 100%;
+max-width: 800px;
 }
 
 #TopRatedProducts {
 height: 300px;
-width: 800px;
+width: 100%;
+max-width: 800px;
+
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
 }
