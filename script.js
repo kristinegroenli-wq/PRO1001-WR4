@@ -1,146 +1,80 @@
+fetch('https://fakestoreapi.com/products') 
+    .then(response => { 
 
+        if (!response.ok) { 
+            throw new Error('Could not get products'); 
+        }
 
-fetch('https://fakestoreapi.com/products')
-  .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } 
-      return response.json()})
-  .then(products => {
-    console.log(products);
-   
-        const ratedProducts = products.filter(
-            product => Number.isFinite(product.rating?.rate)
-        );
-
-        const bucketCount = 10;
-        const counts = Array(bucketCount).fill(0);
-
-        ratedProducts.forEach(product => {
-            const rating = product.rating.rate;
-
-            if (rating >= 0 && rating <= 5) {
-                const bucket = Math.min(
-                    Math.floor(rating * 2),
-                    bucketCount - 1
-                );
-                counts[bucket]++;
-            }
-        });
-
-        const categories = counts.map((_, index) => {
-            const start = (index * 0.5).toFixed(1);
-            const end = ((index + 1) * 0.5).toFixed(1);
-
-            return index === bucketCount - 1
-                ? `${start}–${end}`
-                : `${start}–<${end}`;
-        });
-
-        Highcharts.chart(RatingDistribution, {
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Product Rating Distribution'
-            },
-            subtitle: {
-                text: 'Ratings grouped into 0.5-star columns'
-            },
-            xAxis: {
-                categories,
-                title: {
-                    text: 'Rating (out of 5)'
-                }
-            },
-            yAxis: {
-                min: 0,
-                allowDecimals: false,
-                title: {
-                    text: 'Number of products'
-                }
-            },
-            tooltip: {
-                pointFormat: '<b>{point.y}</b> products'
-            },
-
-            accessibility: {
-             enabled: true,
-             description:
-              'A simple column chart showing the product rating distribution. ' +
-              'Each column represents the number of products in the rating range.'
-           },
-            plotOptions: {
-                column: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            },
-            series: [{
-                name: 'Products',
-                data: counts
-            }]
-        });
-
-        const topProducts = [...ratedProducts]
-            .sort((a, b) => b.rating.rate - a.rating.rate)
-            .slice(0, 10);
-
-        Highcharts.chart(TopRatedProducts, {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Top Rated Products'
-            },
-            xAxis: {
-                categories: topProducts.map(product => product.title),
-                reversed: true,
-                title: {
-                    text: null
-                }
-            },
-            yAxis: {
-                min: 0,
-                max: 5,
-                title: {
-                    text: 'Rating (out of 5)'
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    const product = topProducts[this.point.index];
-
-                    return `<b>${product.title}</b><br>
-                        Rating: ${product.rating.rate} / 5<br>
-                        Rating count: ${product.rating.count}`;
-                }
-            },
-
-            accessibility: {
-             enabled: true,
-             description:
-             'A simple bar chart showing the top 10 products. ' +
-             'Each bar represents the product rating.'
-            },
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true,
-                        format: '{y:.2f}'
-                    }
-                }
-            },
-            series: [{
-                name: 'Rating',
-                data: topProducts.map(product => product.rating.rate)
-            }]
-        });
+        return response.json(); 
     })
-    
-  .catch(err => {
+
+    .then(function (products) { 
+
+        
+      const names = products.map(product => product.title);
+      const scores = products.map(product => product.rating.rate);
+      const category = products.map(product => product.category);
+
+
+      //Creating a counter for the specified ranges. Every range starts at 0, and then the code adds 1 
+      // if it finds any product that matches the specified range
+      const ranges = {
+        'Under 2': 0,
+        '2 to under 3': 0,
+        '3 to under 4': 0,
+        '4 to 5': 0
+      };
+
+      //Using the forEach method described in module 5 to go through all the scores in the array. 
+      // I used the highchart assist to help me figure out how to write the function   
+      products.forEach(product => {
+        const score = product.rating.rate;
+
+        if (score < 2) {
+          ranges['Under 2']++;
+        } else if (score < 3) {
+          ranges['2 to under 3']++;
+        } else if (score < 4) {
+          ranges['3 to under 4']++;
+        } else {
+          ranges['4 to 5']++;
+        }
+      });
+
+      Highcharts.chart('score-chart', {
+        chart: { type: 'column' },
+        title: { text: 'Product rating scores' },
+        xAxis: {
+          title: { text: 'Products' },
+          categories: names,
+          labels: { rotation: -45 }
+        },
+        yAxis: {
+          title: { text: 'Rating score' },
+          min: 0,
+          max: 5
+        },
+        accessibility: { enabled: true },
+        series: [{
+          name: 'Rating',
+          data: scores
+        }]
+      });
+
+      Highcharts.chart('rating-range-chart', {
+        chart: { type: 'pie' },
+        title: { text: 'Products by rating range' },
+        accessibility: { enabled: true },
+        series: [{
+          name: 'Products',
+          data: Object.entries(ranges).map(([name, count]) => ({
+            name: name,
+            y: count
+          }))
+        }]
+      });
+    })
+
+   .catch(err => {
     console.error('Failed to fetch data:', err);
   });
-
-  
