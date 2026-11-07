@@ -41,27 +41,27 @@ nav a:hover {
 }
 
 
-#RatingDistribution {
+#score-chart {
 height: 300px;
 width: 100%;
 max-width: 800px;
 }
 
-#TopRatedProducts {
+#rating-range-chart {
 height: 300px;
 width: 100%;
 max-width: 800px;
 
 }
 
-.RatingsDistributionComment {
+.ratingscoresComment {
     font-size: 16px;
     font-style: italic;
     margin-top: 10px;
     margin-bottom: 100px;
 }
 
-.TopProductsComment {
+.ratingrangeComment {
     font-size: 16px;
     font-style: italic;
     margin-top: 10px;
